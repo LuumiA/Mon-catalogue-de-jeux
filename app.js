@@ -5,6 +5,7 @@ const apiKey = "7de6744618464acb9afade269a9b8898";
 const apiUrl = "https://api.rawg.io/api/games";
 
 let nextPageUrl = null;
+let allGames = []; // Variable globale pour stocker tous les jeux
 
 async function fetchGames(url = `${apiUrl}?key=${apiKey}`) {
   const gamesContainer = document.getElementById("games");
@@ -16,7 +17,8 @@ async function fetchGames(url = `${apiUrl}?key=${apiKey}`) {
       throw new Error("Erreur lors de la récupération des jeux");
     }
     const data = await response.json();
-    displayGames(data.results);
+    allGames = data.results; // Stocke les jeux dans la variable globale
+    displayGames(allGames); // Affiche les jeux
     nextPageUrl = data.next; // Stocke l'URL de la page suivante
   } catch (error) {
     gamesContainer.innerHTML = "<p>Erreur lors du chargement des jeux.</p>";
@@ -97,4 +99,13 @@ const loadGame = document
 
 document.addEventListener("DOMContentLoaded", () => {
   fetchGames();
+});
+
+// Fonction pour rechercher des jeux
+document.getElementById("search").addEventListener("input", (event) => {
+  const query = event.target.value.toLowerCase(); // Récupère la valeur entrée en minuscule
+  const filteredGames = allGames.filter((game) =>
+    game.name.toLowerCase().includes(query)
+  ); // Filtre les jeux par nom
+  displayGames(filteredGames); // Affiche les jeux filtrés
 });
