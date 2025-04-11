@@ -9,7 +9,7 @@ let allGames = []; // Variable globale pour stocker tous les jeux
 
 async function fetchGames(url = `${apiUrl}?key=${apiKey}`) {
   const gamesContainer = document.getElementById("games");
-  gamesContainer.innerHTML = "<p>Chargement...</p>";
+  gamesContainer.classList.add("game-list"); // Assure que la classe est bien appliquée
 
   try {
     const response = await fetch(url);
@@ -17,36 +17,33 @@ async function fetchGames(url = `${apiUrl}?key=${apiKey}`) {
       throw new Error("Erreur lors de la récupération des jeux");
     }
     const data = await response.json();
-    allGames = data.results; // Stocke les jeux dans la variable globale
-    displayGames(allGames); // Affiche les jeux
-    nextPageUrl = data.next; // Stocke l'URL de la page suivante
+
+    // Ajoute les nouveaux jeux à la liste globale
+    allGames = [...allGames, ...data.results];
+
+    // Affiche les nouveaux jeux sans effacer les anciens
+    data.results.forEach((game) => {
+      const gameElement = document.createElement("div");
+      gameElement.classList.add("game-item");
+      gameElement.innerHTML = `
+        <img src="${game.background_image}" alt="${game.name}">
+        <h3>${game.name}</h3>
+        <p>Note : ${game.rating}</p>
+        <p>Date de sortie : ${game.released}</p>
+        <button>Voir plus</button>
+      `;
+
+      // Ajouter un événement pour ouvrir la modale
+      gameElement.addEventListener("click", () => openModal(game));
+
+      gamesContainer.appendChild(gameElement);
+    });
+
+    // Met à jour l'URL de la page suivante
+    nextPageUrl = data.next;
   } catch (error) {
-    gamesContainer.innerHTML = "<p>Erreur lors du chargement des jeux.</p>";
-    console.error(error);
+    console.error("Erreur lors du chargement des jeux :", error);
   }
-}
-
-function displayGames(games) {
-  const gamesContainer = document.getElementById("games");
-  gamesContainer.classList.add("game-list");
-  gamesContainer.innerHTML = "";
-
-  games.forEach((game) => {
-    const gameElement = document.createElement("div");
-    gameElement.classList.add("game-item");
-    gameElement.innerHTML = `
-      <img src="${game.background_image}" alt="${game.name}">
-      <h3>${game.name}</h3>
-      <p>Note : ${game.rating}</p>
-      <p>Date de sortie : ${game.released}</p>
-      <button>Voir plus</button>
-    `;
-
-    // Ajouter un événement pour ouvrir la modale
-    gameElement.addEventListener("click", () => openModal(game));
-
-    gamesContainer.appendChild(gameElement);
-  });
 }
 
 // Fonction pour afficher la modale avec les détails du jeu
@@ -89,7 +86,11 @@ window.addEventListener("click", (event) => {
 
 document.getElementById("loadMore").addEventListener("click", () => {
   if (nextPageUrl) {
-    fetchGames(nextPageUrl); // Charge la page suivante
+    fetchGames(nextPageUrl);
+  } else {
+    document.getElementById("loadMore").disabled = true; // Désactive le bouton
+    document.getElementById("loadMore").textContent =
+      "Tous les jeux sont chargés";
   }
 });
 
