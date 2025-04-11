@@ -40,14 +40,50 @@ function displayGames(games) {
       <button>Voir plus</button>
     `;
 
-    // Ajoute un événement click pour afficher plus de détails
-    gameElement.addEventListener("click", () => {
-      alert(`Vous avez cliqué sur ${game.name}`);
-    });
+    // Ajouter un événement pour ouvrir la modale
+    gameElement.addEventListener("click", () => openModal(game));
 
     gamesContainer.appendChild(gameElement);
   });
 }
+
+// Fonction pour afficher la modale avec les détails du jeu
+function openModal(game) {
+  const modal = document.getElementById("gameModal");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalImage = document.getElementById("modalImage");
+  const modalDescription = document.getElementById("modalDescription");
+  const modalGenres = document.getElementById("modalGenres");
+  const modalPlatforms = document.getElementById("modalPlatforms");
+
+  // Remplir les informations de la modale
+  modalTitle.textContent = game.name;
+  modalImage.src = game.background_image;
+  modalDescription.textContent =
+    game.description || "Aucune description disponible.";
+  modalGenres.textContent = `Genres : ${game.genres
+    .map((genre) => genre.name)
+    .join(", ")}`;
+  modalPlatforms.textContent = `Plateformes : ${game.platforms
+    .map((platform) => platform.platform.name)
+    .join(", ")}`;
+
+  // Afficher la modale
+  modal.style.display = "block";
+}
+
+// Fermer la modale
+document.querySelector(".close").addEventListener("click", () => {
+  document.getElementById("gameModal").style.display = "none";
+});
+
+// Fermer la modale en cliquant en dehors du contenu
+window.addEventListener("click", (event) => {
+  const modal = document.getElementById("gameModal");
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+});
 
 document.getElementById("loadMore").addEventListener("click", () => {
   if (nextPageUrl) {
