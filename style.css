@@ -124,3 +124,53 @@ footer {
   margin-top: auto; /* Permet au footer de rester en bas */
   box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
 }
+
+/* Modale */
+.modal {
+  display: none; /* Cachée par défaut */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8); /* Fond semi-transparent */
+}
+
+/* Contenu de la modale */
+.modal-content {
+  background-color: #2a2a40; /* Fond bleu foncé */
+  margin: 10% auto;
+  padding: 20px;
+  border: 1px solid #ffa500; /* Bordure orange */
+  border-radius: 10px;
+  width: 80%;
+  max-width: 600px;
+  color: #ffffff; /* Texte blanc */
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Image dans la modale */
+.modal-content img {
+  width: 100%; /* L'image occupe toute la largeur de la modale */
+  height: auto; /* Conserve les proportions de l'image */
+  border-radius: 10px; /* Ajoute des coins arrondis pour un style plus moderne */
+  margin-bottom: 20px; /* Ajoute un espace sous l'image */
+}
+
+/* Bouton de fermeture */
+.close {
+  color: #ffa500; /* Orange */
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: #ffffff; /* Blanc */
+  text-decoration: none;
+}
