@@ -10,15 +10,11 @@ Le projet est organisé comme suit :
 
 ```
 video-game-website
-├── src
-│   ├── index.html        # Page principale du site
-│   ├── styles
-│   │   └── style.css     # Styles CSS pour le site
-│   ├── scripts
-│   │   └── app.js        # Script JavaScript principal
+│   ├── index.html        # Page principale du site  
+    ├── style.css     # Styles CSS pour le site
+│   ├── app.js        # Script JavaScript principal
 ├── assets
 │   └── README.md         # Informations sur les ressources utilisées
-└── README.md             # Documentation du projet
 ```
 
 ## Installation
